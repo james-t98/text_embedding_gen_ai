@@ -32,12 +32,14 @@ llm = None
 chat_history = None
 rag_chain = None
 
-def create_database_instance(instance_name: str, region: str, password: str, database_name: str):
+def create_database_instance(instance_name: str, region: str, password: str):
     logger.info("Creating new Postgres Cloud SQL Instance...")
-    # !gcloud sql instances create {instance_name} --database-version=POSTGRES_15 \
-            #     --region={region} --cpu=1 --memory=4GB --root-password={password} \
-            #     --database-flags=cloudsql.iam_authentication=On
-            # !gcloud sql databases create {database_name} --instance={instance_name}
+    created_database = (subprocess.check_output(["gcloud" , "sql" , "instances" , 
+                                                 "create", f"{instance_name}", "--database-version=POSTGRES_15",
+                                                 "--region", f"{region}", "--cpu=1", "--memory=4GB",
+                                                 "--root-password", f"{password}", 
+                                                 "--database-flags=cloudsql.iam_authentication=On"]))
+    logger.info("Postgres Cloud SQL Instance created!\n")
     pass
 
 def database_instance_exists(instance_name: str) -> bool:
@@ -57,7 +59,7 @@ def database_instance_exists(instance_name: str) -> bool:
             # Ask if user would like to create instance?
             create_db_instance = input("Would you like to create a new Cloud SQL Instance? (y/n): ")
             if create_db_instance.lower() == "y":
-                create_database_instance(INSTANCE, REGION, PASSWORD, DATABASE)
+                create_database_instance(INSTANCE, REGION, PASSWORD)
             else:
                 logger.info("Exiting...\n")
                 exit()     
@@ -68,8 +70,8 @@ def database_instance_exists(instance_name: str) -> bool:
 
 def create_database(database_name: str, instance_name: str):
     logger.info("Creating new Cloud SQL Database...")
-    # !gcloud sql databases create {database_name} --instance={instance_name}
-    pass
+    created_database = (subprocess.check_output(["gcloud" , "sql" , "databases" , "create", f"{database_name}", "--instance", f"{instance_name}"]))
+    logger.info("Cloud SQL Database created!\n")
 
 def database_exists(database_name: str, instance_name: str) -> bool:
     logger.info("Checking if Cloud SQL Database exists...")

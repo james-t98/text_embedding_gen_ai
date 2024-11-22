@@ -7,7 +7,7 @@ chat_session_id = "example-test-session"
 # Add Search Methodology for Embedding Retriever [ MMR, Semantic Search ]
 
 def main():
-    llm, retriever, memory, init_prompt, condensed_question_prompt, chat_history = run_setup(number_of_docs_to_load, file_path, chat_session_id)
+    llm, retriever, memory, init_prompt, condensed_question_prompt, chat_history = run_setup(number_of_docs_to_load, csv_file_path, chat_session_id)
     rag_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=retriever,

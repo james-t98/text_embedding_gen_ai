@@ -5,8 +5,8 @@ PROJECT_ID = "sublime-delight-436909-i0"
 REGION = "europe-west4"
 
 # CloudSQL PostgreSQL General Variables
-INSTANCE = "langchain-quickstart-instance"
-DATABASE = "langchain-quickstart-db"
+INSTANCE = "langchain-quickstart-instance-test"
+DATABASE = "langchain-quickstart-db-test"
 STORAGE_BUCKET = "langchain-quickstart-bucket" 
 TABLE_NAME = ""
 

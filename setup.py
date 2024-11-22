@@ -42,18 +42,12 @@ def create_database_instance(instance_name: str, region: str, password: str):
     logger.info("Postgres Cloud SQL Instance created!\n")
     pass
 
-def database_instance_exists(instance_name: str) -> bool:
-    logger.info("Checking if Cloud SQL Instance exists...")
-
-    try:
-        database_version = (subprocess.check_output(["gcloud" , "sql" , "instances" , "describe", f"{instance_name}", "--format=value(databaseVersion)"], text=True)).split()
-        if len(database_version) > 0:
-            for db_instance in database_version:
-                if db_instance.startswith("POSTGRES"):
-                    logger.info("Found existing Postgres Cloud SQL Instance!\n")
-                else:
-                    logger.warning("Postgres Cloud SQL Instance not found! But other instances exist")
-            return True
+def database_instance_exists(instance_name: str):
+    logger.info("Checking if Cloud SQL Instance exists...")   
+    try:    
+        instances = subprocess.check_output(["gcloud", "sql", "instances", "list", "--format=value(NAME)"], text=True).split()
+        if instance_name in instances:
+            logger.info("Found existing Postgres Cloud SQL Instance!\n")
         else:
             logger.warning("Cloud SQL Instance not found!")
             # Ask if user would like to create instance?
@@ -62,37 +56,31 @@ def database_instance_exists(instance_name: str) -> bool:
                 create_database_instance(INSTANCE, REGION, PASSWORD)
             else:
                 logger.info("Exiting...\n")
-                exit()     
+                exit()    
     except subprocess.CalledProcessError as e:
         logger.error(f"Command to check if database exists failed with return code {e.returncode}\n")
-
-    return False
 
 def create_database(database_name: str, instance_name: str):
     logger.info("Creating new Cloud SQL Database...")
     created_database = (subprocess.check_output(["gcloud" , "sql" , "databases" , "create", f"{database_name}", "--instance", f"{instance_name}"]))
     logger.info("Cloud SQL Database created!\n")
 
-def database_exists(database_name: str, instance_name: str) -> bool:
+def database_exists(database_name: str, instance_name: str):
     logger.info("Checking if Cloud SQL Database exists...")
-
     try:
         databases = (subprocess.check_output(["gcloud" , "sql" , "databases" , "list", f"--instance={instance_name}", "--format=value(NAME)"], text=True)).split()
         if database_name not in databases:
-            logger.warning("Database not found!\n")
+            logger.info("Database not found!\n")
             create_db = input("Would you like to create a new Postgres Cloud SQL Database? (y/n): ")
             if create_db.lower() == "y":
-                create_database(DATABASE, INSTANCE)
+               create_database(DATABASE, INSTANCE)
             else:
                 logger.info("Exiting...\n")
                 exit()
         else:
             logger.info("Database found!\n")
-            return True   
     except subprocess.CalledProcessError as e:
         logger.error(f"Command to check if database exists failed with return code {e.returncode}\n")
-
-    return False
 
 def define_embedding_service(model_name: str,project_id: str) -> VertexAIEmbeddings:
     logger.info("Defining embedding service...")

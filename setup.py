@@ -132,7 +132,6 @@ def add_vector_documents(documents: list[str], vector_store: PostgresVectorStore
     logger.info("Documents added to vector store!\n")
     return vector_store
 
-# TODO: Implement adding a single new document to the vector store.
 def add_vector_document(document: str, vector_store: PostgresVectorStore) -> PostgresVectorStore:
     logger.info("Adding document to vector store...")
     id = str(uuid.uuid4())

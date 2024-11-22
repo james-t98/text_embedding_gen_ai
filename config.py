@@ -7,7 +7,7 @@ REGION = "europe-west4"
 # CloudSQL PostgreSQL General Variables
 INSTANCE = "langchain-quickstart-instance"
 DATABASE = "langchain-quickstart-db"
-STORAGE_BUCKET = "" 
+STORAGE_BUCKET = "langchain-quickstart-bucket" 
 TABLE_NAME = ""
 
 # Vector Store Variables

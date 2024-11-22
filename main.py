@@ -2,7 +2,7 @@ from setup import run_setup, prompt_model
 from langchain.chains import ConversationalRetrievalChain
 
 number_of_docs_to_load = 15
-file_path = "data/movies.csv"
+csv_file_path = "data/movies.csv"
 chat_session_id = "example-test-session"
 # Add Search Methodology for Embedding Retriever [ MMR, Semantic Search ]
 

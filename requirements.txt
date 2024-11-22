@@ -1,0 +1,4 @@
+google-cloud-aiplatform[reasoningengine,langchain]==1.72
+google-cloud-resource-manager
+langchain-community[gcs]
+langchain-google-vertexai
